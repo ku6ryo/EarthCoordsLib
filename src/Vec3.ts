@@ -1,3 +1,4 @@
+import { EPSILON } from "./constants"
 
 export class Vec3 {
 
@@ -38,5 +39,9 @@ export class Vec3 {
 
   toString() {
     return `(${this.x}, ${this.y}, ${this.z})`
+  }
+
+  almostEqual(v: Vec3, epsilon = EPSILON) {
+    return this.dot(v) > 1 - epsilon
   }
 }

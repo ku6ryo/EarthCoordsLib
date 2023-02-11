@@ -1,6 +1,6 @@
 {
-  "name": "GeolocationCalculation",
-  "version": "1.0.0",
+  "name": "eath-coords-lib",
+  "version": "0.0.1",
   "main": "index.js",
   "author": "Ryo Kuroyanagi",
   "license": "MIT",
