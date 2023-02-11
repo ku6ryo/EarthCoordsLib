@@ -10,11 +10,8 @@ on:
 
 jobs:
   all:
-    name: Lint / Build
+    name: Tests all
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node
