@@ -1,6 +1,5 @@
 import { Coordinates } from "./Coordinates"
 import { Vec3 } from "./Vec3"
-import { EARTH_RADIUS_ROUGH } from "./constants"
 
 /**
  * Calculates the vector from the center of the Earth to the given coords.
@@ -27,9 +26,8 @@ export function coordinatesToVec(c: Coordinates) {
 export function calcDistanceBetweenCoords(c0: Coordinates, c1: Coordinates) {
   const v0 = coordinatesToVec(c0)
   const v1 = coordinatesToVec(c1)
-  const d = v0.dot(v1)
-  const rad = Math.acos(d)
-  return rad * EARTH_RADIUS_ROUGH
+  const rad = v0.dot(v1)
+  return Math.acos(rad)
 }
 
 /**
