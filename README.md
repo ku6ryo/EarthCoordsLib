@@ -1,0 +1,1 @@
+Calculation library / example for calculations related to coordinates on the Earth.
