@@ -1,12 +1,11 @@
 import { Coordinates } from "./Coordinates"
 import { Vec3 } from "./Vec3"
-import { calcDistanceBetweenCoords, calcVecFromStartToEnd, coordinatesToVec } from "./calc"
+import { calcDistanceBetweenCoords, calcVecFromStartToEnd, clacVecFromStartToEndOnSurface, coordinatesToVec } from "./calc"
 import { EPSILON } from "./constants"
 
 function almostEqualNumber(a: number, b: number) {
   return Math.abs(a - b) < EPSILON
 }
-
 
 describe("coordinatesToVec", () => {
   it("The north pole", () => {
@@ -38,7 +37,7 @@ describe("Round distance tests", () => {
   })
 })
 
-describe("Start --> End vector", () => {
+describe("Start --> End vector 3D", () => {
   it("Vector 0,-30 --> 0,0", () => {
     const v = calcVecFromStartToEnd(new Coordinates(0, -30), new Coordinates(0, 0))
     expect(v.almostEqual(new Vec3(0, 1, 0).normalize())).toBe(true)
@@ -58,5 +57,20 @@ describe("Start --> End vector", () => {
   it("Vector from opposite side", () => {
     const v = calcVecFromStartToEnd(new Coordinates(0, 0), new Coordinates(0, 180))
     expect(v.almostEqual(new Vec3(0, 0, -1).normalize())).toBe(true)
+  })
+})
+
+describe("Start --> End vector in surface coordinate system", () => {
+  it("Vector 0,-30 --> 0,0", () => {
+    const v = clacVecFromStartToEndOnSurface(new Coordinates(0, -30), new Coordinates(0, 0))
+    expect(v.almostEqual(new Vec3(1, 0, 0).normalize())).toBe(true)
+  })
+  it("Vector -45,-90 --> 0,0", () => {
+    const v = clacVecFromStartToEndOnSurface(new Coordinates(-45, -90), new Coordinates(0, 0))
+    expect(v.almostEqual(new Vec3(1, 1, 0).normalize())).toBe(true)
+  })
+  it("Vector from opposite side", () => {
+    const v = clacVecFromStartToEndOnSurface(new Coordinates(0, 0), new Coordinates(0, 180))
+    expect(v.almostEqual(new Vec3(0, -1, 0).normalize())).toBe(true)
   })
 })

@@ -1,5 +1,8 @@
+import Matrix from "ml-matrix"
 import { Coordinates } from "./Coordinates"
 import { Vec3 } from "./Vec3"
+import { EPSILON } from "./constants"
+import { createRotXMat, createRotZMat } from "./affine"
 
 /**
  * Calculates the vector from the center of the Earth to the given coords.
@@ -39,5 +42,19 @@ export function calcVecFromStartToEnd(s: Coordinates, e: Coordinates) {
   const c = sv.cross(ev)
   // If the two places are so close or they are on the completely opposite place of the Earth,
   // caluculates direction from the north pole.
-  return c.squaredLength() < 0.0000000001 ? new Vec3(0, 0, 1).cross(ev).cross(ev).normalize() : c.cross(ev).normalize()
+  return c.squaredLength() < EPSILON ? new Vec3(0, 0, 1).cross(ev).cross(ev).normalize() : c.cross(ev).normalize()
+}
+
+/**
+ * Calculates the vector at the end point when we trip from the start point to the end point in minimum distance.
+ * The vector is of the coordinate system on the surface of the Earth.
+ * East is x axis, North is y axis, and z axis is oppsite of gravity.
+ */
+export function clacVecFromStartToEndOnSurface(s: Coordinates, e: Coordinates) {
+  const v3d = calcVecFromStartToEnd(s, e)
+  const mRotZ = createRotZMat((e.lat - 90) * Math.PI / 180)
+  const mRotX = createRotXMat(- Math.PI / 2)
+  const mV = new Matrix([[v3d.x], [v3d.y], [v3d.z], [1]])
+  const result = mRotX.mmul(mRotZ.mmul(mV))
+  return new Vec3(result.get(0, 0), result.get(1, 0), result.get(2, 0))
 }
